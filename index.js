@@ -37,8 +37,8 @@ exports.hash = function(pwd, salt, cb) {
 
     // create hash from plain text password and salt
     // hash('secret', 'salt', function(err, hash) {})
-    if (!pwd) return cb(new Error('password missing'));
-    if (!salt) return cb(new Error('salt missing'));
+    if (typeof pwd !== 'string') return cb(new Error('password missing'));
+    if (typeof salt !== 'string') return cb(new Error('salt missing'));
     crypto.pbkdf2(pwd, salt, iterations, keylen, digest, function(err, hash) {
       if (err) return cb(err);
       cb(null, hash.toString(encoding));
@@ -49,7 +49,7 @@ exports.hash = function(pwd, salt, cb) {
     // generate salt and password hash from plain text password
     // hash('secret', function(err, salt, hash) {})
     cb = salt;
-    if (!pwd) return cb(new Error('password missing'));
+    if (typeof pwd !== 'string') return cb(new Error('password missing'));
     crypto.randomBytes(size, function(err, salt) {
       if (err) return cb(err);
       salt = salt.toString('hex');
